@@ -1,8 +1,8 @@
 # 5.1.0
    - API:
-     - added roundabout-turn instruction. The instruction indicates a small roundabout that is treated as an intersection
+     - added StepManeuver type `roundabout turn`. The type indicates a small roundabout that is treated as an intersection
         (turn right at the roundabout for first exit, go straight at the roundabout...)
-     - added ramp_type. The ramp instruction allows to distinguish between on-ramps (ramp_type = entry) and off-ramps (ramp_type = exit)
+     - added StepManeuver type `on ramp` and `off ramp` to distinguish between ramps that enter and exit a highway.
      - reduced new name instructions for trivial changes
      - combined multiple turns into a single instruction at segregated roads`
 
