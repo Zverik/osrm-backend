@@ -430,7 +430,9 @@ step.
   | depart            | indicates the departure of the leg                           |
   | arrive            | indicates the destination of the leg                         |
   | merge             | merge onto a street (e.g. getting on the highway from a ramp, the `modifier specifies the direction of the merge`) |
-  | ramp              | take a ramp to enter/exit a highway (direction given my `modifier`)                          |
+  | ramp              | **Deprecated**. Replaced by `on_ramp` and `off_ramp`.        |
+  | on_ramp           | take a ramp to enter a highway (direction given my `modifier`) |
+  | off_ramp          | take a ramp to exit a highway (direction given my `modifier`)  |
   | fork              | take the left/right side at a fork depending on `modifier`   |
   | end of road       | road ends in a T intersection turn in direction of `modifier`|
   | continue          | Turn in direction of `modifier` to stay on the same road     |

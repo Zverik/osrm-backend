@@ -142,6 +142,8 @@ module.exports = function () {
                 case 'depart':
                 case 'arrive':
                     return v.maneuver.type;
+                case 'ramp':
+                    return v.maneuver.type + '-' + v.maneuver.ramp_type + ' ' + v.maneuver.modifier;
                 case 'roundabout':
                     return 'roundabout-exit-' + v.maneuver.exit;
                 case 'rotary':
