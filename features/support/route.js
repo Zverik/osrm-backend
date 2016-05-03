@@ -142,8 +142,9 @@ module.exports = function () {
                 case 'depart':
                 case 'arrive':
                     return v.maneuver.type;
-                case 'ramp':
-                    return v.maneuver.type + '-' + v.maneuver.ramp_type + ' ' + v.maneuver.modifier;
+                case 'on ramp':
+                case 'off ramp':
+                    return v.maneuver.type + ' ' + v.maneuver.modifier;
                 case 'roundabout':
                     return 'roundabout-exit-' + v.maneuver.exit;
                 case 'rotary':
@@ -151,7 +152,7 @@ module.exports = function () {
                         return v.rotary_name + '-exit-' + v.maneuver.exit;
                     else
                         return 'rotary-exit-' + v.maneuver.exit;
-                case 'roundabout_turn':
+                case 'roundabout turn':
                     return v.maneuver.type + ' ' + v.maneuver.modifier + ' exit-' + v.maneuver.exit;
                 // FIXME this is a little bit over-simplistic for merge/fork instructions
                 default:

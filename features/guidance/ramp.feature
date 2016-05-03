@@ -17,7 +17,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route     | turns                          |
-            | a,d       | abc,bd,bd | depart,ramp-entry right,arrive |
+            | a,d       | abc,bd,bd | depart,on ramp right,arrive |
 
     Scenario: Ramp On Through Street Left
         Given the node map
@@ -31,7 +31,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route     | turns                         |
-            | a,d       | abc,bd,bd | depart,ramp-entry left,arrive |
+            | a,d       | abc,bd,bd | depart,on ramp left,arrive |
 
     Scenario: Ramp On Through Street Left and Right
         Given the node map
@@ -47,8 +47,8 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route     | turns                          |
-            | a,d       | abc,bd,bd | depart,ramp-entry right,arrive |
-            | a,e       | abc,be,be | depart,ramp-entry left,arrive  |
+            | a,d       | abc,bd,bd | depart,on ramp right,arrive |
+            | a,e       | abc,be,be | depart,on ramp left,arrive  |
 
     Scenario: Ramp On Three Way Intersection Right
         Given the node map
@@ -63,7 +63,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route    | turns                          |
-            | a,d       | ab,bd,bd | depart,ramp-entry right,arrive |
+            | a,d       | ab,bd,bd | depart,on ramp right,arrive |
 
     Scenario: Ramp On Three Way Intersection Right
         Given the node map
@@ -79,7 +79,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route    | turns                          |
-            | a,d       | ab,bd,bd | depart,ramp-entry right,arrive |
+            | a,d       | ab,bd,bd | depart,on ramp right,arrive |
 
     Scenario: Ramp Off Though Street
         Given the node map
@@ -94,7 +94,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route     | turns                          |
-            | a,d       | abc,bd,bd | depart,ramp-entry right,arrive |
+            | a,d       | abc,bd,bd | depart,on ramp right,arrive |
             | a,c       | abc,abc   | depart,arrive                  |
 
     Scenario: Straight Ramp Off Turning Though Street
@@ -109,7 +109,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route       | turns                             |
-            | a,d       | abc,bd,bd   | depart,ramp-entry straight,arrive |
+            | a,d       | abc,bd,bd   | depart,on ramp straight,arrive |
             | a,c       | abc,abc,abc | depart,continue left,arrive       |
 
     Scenario: Fork Ramp Off Turning Though Street
@@ -125,7 +125,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route       | turns                             |
-            | a,d       | abc,bd,bd   | depart,ramp-entry right,arrive    |
+            | a,d       | abc,bd,bd   | depart,on ramp right,arrive    |
             | a,c       | abc,abc,abc | depart,continue left,arrive       |
 
     Scenario: Fork Ramp
@@ -142,7 +142,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route    | turns                          |
-            | a,d       | ab,bd,bd | depart,ramp-entry right,arrive |
+            | a,d       | ab,bd,bd | depart,on ramp right,arrive |
             | a,c       | ab,bc,bc | depart,turn left,arrive        |
 
     Scenario: Fork Slight Ramp
@@ -159,7 +159,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route    | turns                                 |
-            | a,d       | ab,bd,bd | depart,ramp-entry slight right,arrive |
+            | a,d       | ab,bd,bd | depart,on ramp slight right,arrive |
             | a,c       | ab,bc,bc | depart,turn slight left,arrive        |
 
     Scenario: Fork Slight Ramp on Through Street
@@ -175,7 +175,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route       | turns                                    |
-            | a,d       | abc,bd,bd   | depart,ramp-entry slight right,arrive    |
+            | a,d       | abc,bd,bd   | depart,on ramp slight right,arrive    |
             | a,c       | abc,abc,abc | depart,continue slight left,arrive       |
 
     Scenario: Fork Slight Ramp on Obvious Through Street
@@ -191,7 +191,7 @@ Feature: Ramp Guidance
 
        When I route I should get
             | waypoints | route     | turns                                 |
-            | a,d       | abc,bd,bd | depart,ramp-entry slight right,arrive |
+            | a,d       | abc,bd,bd | depart,on ramp slight right,arrive |
             | a,c       | abc,abc   | depart,arrive                         |
 
     Scenario: Two Ramps Joining into common Motorway
