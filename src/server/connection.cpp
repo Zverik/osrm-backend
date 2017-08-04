@@ -1,6 +1,7 @@
 #include "server/connection.hpp"
 #include "server/request_handler.hpp"
 #include "server/request_parser.hpp"
+#include "util/log.hpp"
 
 #include <boost/assert.hpp>
 #include <boost/bind.hpp>
@@ -26,6 +27,8 @@ boost::asio::ip::tcp::socket &Connection::socket() { return TCP_socket; }
 /// Start the first asynchronous operation for the connection.
 void Connection::start()
 {
+    start_reading_time = std::chrono::steady_clock::now();
+    first_reading_time = start_reading_time;
     TCP_socket.async_read_some(
         boost::asio::buffer(incoming_data_buffer),
         strand.wrap(boost::bind(&Connection::handle_read,
@@ -41,6 +44,10 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
         return;
     }
 
+    if (first_reading_time == start_reading_time)
+    {
+        first_reading_time = std::chrono::steady_clock::now();
+    }
     // no error detected, let's parse the request
     http::compression_type compression_type(http::no_compression);
     RequestParser::RequestStatus result;
@@ -53,7 +60,9 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
     if (result == RequestParser::RequestStatus::valid)
     {
         current_request.endpoint = TCP_socket.remote_endpoint().address();
+        start_processing_time = std::chrono::steady_clock::now();
         request_handler.HandleRequest(current_request, current_reply);
+        start_writing_time = std::chrono::steady_clock::now();
 
         // compress the result w/ gzip/deflate if requested
         switch (compression_type)
@@ -92,6 +101,8 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
     else if (result == RequestParser::RequestStatus::invalid)
     { // request is not parseable
         current_reply = http::reply::stock_reply(http::reply::bad_request);
+        start_processing_time = std::chrono::steady_clock::now();
+        start_writing_time = start_processing_time;
 
         boost::asio::async_write(TCP_socket,
                                  current_reply.to_buffers(),
@@ -111,6 +122,11 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
     }
 }
 
+inline float delta_time_ms(std::chrono::time_point<std::chrono::steady_clock> const & lhs, std::chrono::time_point<std::chrono::steady_clock> const & rhs)
+{
+    return 0.000001 * std::chrono::duration_cast<std::chrono::nanoseconds>(lhs-rhs).count();
+}
+
 /// Handle completion of a write operation.
 void Connection::handle_write(const boost::system::error_code &error)
 {
@@ -119,6 +135,14 @@ void Connection::handle_write(const boost::system::error_code &error)
         // Initiate graceful connection closure.
         boost::system::error_code ignore_error;
         TCP_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignore_error);
+        auto final_time = std::chrono::steady_clock::now();
+        util::Log() << "Whole duration: "<< delta_time_ms(final_time, start_reading_time) <<
+            "ms = time to first read : " << delta_time_ms(first_reading_time, start_reading_time) << // maybe worseless
+            "ms + reading time: " << delta_time_ms(start_processing_time, first_reading_time) <<
+            "ms + processing time: " << delta_time_ms(start_writing_time, start_processing_time) <<
+            "ms + writing time: " << delta_time_ms(final_time, start_writing_time) <<
+            "ms";
+
     }
 }
 

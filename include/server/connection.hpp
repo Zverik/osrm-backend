@@ -11,6 +11,7 @@
 #include <boost/config.hpp>
 #include <boost/version.hpp>
 
+#include <chrono>
 #include <memory>
 #include <vector>
 
@@ -65,6 +66,7 @@ class Connection : public std::enable_shared_from_this<Connection>
     std::vector<char> compressed_output;
     // Header compression_header;
     std::vector<boost::asio::const_buffer> output_buffer;
+    std::chrono::time_point<std::chrono::steady_clock> start_reading_time, first_reading_time, start_processing_time, start_writing_time;
 };
 }
 }
