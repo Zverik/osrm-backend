@@ -31,7 +31,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "extractor/travel_mode.hpp"
 #include "util/typedefs.hpp"
 
-#include "util/bearing.hpp"
 #include "util/coordinate.hpp"
 
 #include <boost/assert.hpp>
@@ -48,14 +47,13 @@ namespace engine
 struct PhantomNode
 {
     PhantomNode()
-        : forward_segment_id{SPECIAL_SEGMENTID, false}, reverse_segment_id{SPECIAL_SEGMENTID,
-                                                                           false},
-          forward_weight(INVALID_EDGE_WEIGHT), reverse_weight(INVALID_EDGE_WEIGHT),
-          forward_weight_offset(0), reverse_weight_offset(0),
+        : forward_segment_id{SPECIAL_SEGMENTID, false},
+          reverse_segment_id{SPECIAL_SEGMENTID, false}, forward_weight(INVALID_EDGE_WEIGHT),
+          reverse_weight(INVALID_EDGE_WEIGHT), forward_weight_offset(0), reverse_weight_offset(0),
           forward_duration(MAXIMAL_EDGE_DURATION), reverse_duration(MAXIMAL_EDGE_DURATION),
-          forward_duration_offset(0), reverse_duration_offset(0),
-          fwd_segment_position(0), is_valid_forward_source{false}, is_valid_forward_target{false},
-          is_valid_reverse_source{false}, is_valid_reverse_target{false}, bearing(0)
+          forward_duration_offset(0), reverse_duration_offset(0), fwd_segment_position(0),
+          is_valid_forward_source{false}, is_valid_forward_target{false},
+          is_valid_reverse_source{false}, is_valid_reverse_target{false}
     {
     }
 
@@ -87,9 +85,8 @@ struct PhantomNode
 
     bool IsValid(const unsigned number_of_nodes) const
     {
-        return location.IsValid() &&
-               ((forward_segment_id.id < number_of_nodes) ||
-                (reverse_segment_id.id < number_of_nodes)) &&
+        return location.IsValid() && ((forward_segment_id.id < number_of_nodes) ||
+                                      (reverse_segment_id.id < number_of_nodes)) &&
                ((forward_weight != INVALID_EDGE_WEIGHT) ||
                 (reverse_weight != INVALID_EDGE_WEIGHT)) &&
                ((forward_duration != MAXIMAL_EDGE_DURATION) ||
@@ -120,12 +117,6 @@ struct PhantomNode
     {
         return reverse_segment_id.enabled && is_valid_reverse_target;
     }
-    short GetBearing(const bool traversed_in_reverse) const
-    {
-        if (traversed_in_reverse)
-            return util::bearing::reverse(bearing);
-        return bearing;
-    }
 
     bool operator==(const PhantomNode &other) const { return location == other.location; }
 
@@ -145,8 +136,7 @@ struct PhantomNode
                          bool is_valid_reverse_source,
                          bool is_valid_reverse_target,
                          const util::Coordinate location,
-                         const util::Coordinate input_location,
-                         const unsigned short bearing)
+                         const util::Coordinate input_location)
         : forward_segment_id{other.forward_segment_id},
           reverse_segment_id{other.reverse_segment_id}, forward_weight{forward_weight},
           reverse_weight{reverse_weight}, forward_weight_offset{forward_weight_offset},
@@ -158,7 +148,7 @@ struct PhantomNode
           is_valid_forward_source{is_valid_forward_source},
           is_valid_forward_target{is_valid_forward_target},
           is_valid_reverse_source{is_valid_reverse_source},
-          is_valid_reverse_target{is_valid_reverse_target}, bearing{bearing}
+          is_valid_reverse_target{is_valid_reverse_target}
     {
     }
 
@@ -183,8 +173,7 @@ struct PhantomNode
     unsigned short is_valid_forward_target : 1;
     unsigned short is_valid_reverse_source : 1;
     unsigned short is_valid_reverse_target : 1;
-    unsigned short bearing : 9;
-    unsigned short : 3; // Unused padding out to 16 bits (2 bytes)
+    unsigned short : 12; // Unused padding out to 16 bits (2 bytes)
 };
 
 static_assert(sizeof(PhantomNode) == 64, "PhantomNode has more padding then expected");
