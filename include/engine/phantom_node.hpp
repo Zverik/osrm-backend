@@ -48,12 +48,13 @@ namespace engine
 struct PhantomNode
 {
     PhantomNode()
-        : forward_segment_id{SPECIAL_SEGMENTID, false},
-          reverse_segment_id{SPECIAL_SEGMENTID, false}, forward_weight(INVALID_EDGE_WEIGHT),
-          reverse_weight(INVALID_EDGE_WEIGHT), forward_weight_offset(0), reverse_weight_offset(0),
+        : forward_segment_id{SPECIAL_SEGMENTID, false}, reverse_segment_id{SPECIAL_SEGMENTID,
+                                                                           false},
+          forward_weight(INVALID_EDGE_WEIGHT), reverse_weight(INVALID_EDGE_WEIGHT),
+          forward_weight_offset(0), reverse_weight_offset(0),
           forward_duration(MAXIMAL_EDGE_DURATION), reverse_duration(MAXIMAL_EDGE_DURATION),
-          forward_duration_offset(0), reverse_duration_offset(0), fwd_segment_position(0),
-          is_valid_forward_source{false}, is_valid_forward_target{false},
+          forward_duration_offset(0), reverse_duration_offset(0),
+          fwd_segment_position(0), is_valid_forward_source{false}, is_valid_forward_target{false},
           is_valid_reverse_source{false}, is_valid_reverse_target{false}, bearing(0)
     {
     }
@@ -86,8 +87,9 @@ struct PhantomNode
 
     bool IsValid(const unsigned number_of_nodes) const
     {
-        return location.IsValid() && ((forward_segment_id.id < number_of_nodes) ||
-                                      (reverse_segment_id.id < number_of_nodes)) &&
+        return location.IsValid() &&
+               ((forward_segment_id.id < number_of_nodes) ||
+                (reverse_segment_id.id < number_of_nodes)) &&
                ((forward_weight != INVALID_EDGE_WEIGHT) ||
                 (reverse_weight != INVALID_EDGE_WEIGHT)) &&
                ((forward_duration != MAXIMAL_EDGE_DURATION) ||
@@ -121,8 +123,8 @@ struct PhantomNode
     short GetBearing(const bool traversed_in_reverse) const
     {
         if (traversed_in_reverse)
-            return std::round(util::bearing::reverse(bearing));
-        return std::round(bearing);
+            return util::bearing::reverse(bearing);
+        return bearing;
     }
 
     bool operator==(const PhantomNode &other) const { return location == other.location; }
