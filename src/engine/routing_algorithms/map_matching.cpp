@@ -196,7 +196,7 @@ SubMatchingList mapMatching(SearchEngineData<Algorithm> &engine_working_data,
             auto &current_lengths = model.path_distances[t];
             auto &current_segment_id = model.working_segment_id[t];
             auto &current_timestamps_list = candidates_list[t];
-            const auto &current_coordinate = trace_coordinates[t];
+            auto &current_coordinate = trace_coordinates[t];
 
             const auto haversine_distance = util::coordinate_calculation::haversineDistance(
                 prev_coordinate, current_coordinate);
@@ -496,7 +496,7 @@ mapMatching(SearchEngineData<ch::Algorithm> &engine_working_data,
 template SubMatchingList
 mapMatching(SearchEngineData<corech::Algorithm> &engine_working_data,
             const DataFacade<corech::Algorithm> &facade,
-            const CandidateLists &candidates_list,
+            CandidateLists &candidates_list,
             const std::vector<util::Coordinate> &trace_coordinates,
             const std::vector<unsigned> &trace_timestamps,
             const std::vector<boost::optional<double>> &trace_gps_precision,

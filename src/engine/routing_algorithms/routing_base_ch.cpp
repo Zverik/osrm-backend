@@ -392,6 +392,7 @@ double getNetworkDistance(SearchEngineData<Algorithm> &engine_working_data,
                           SearchEngineData<Algorithm>::QueryHeap &reverse_heap,
                           const PhantomNode &source_phantom,
                           const PhantomNode &target_phantom,
+                          NodeID &last_id,
                           EdgeWeight weight_upper_bound)
 {
     forward_heap.Clear();
@@ -415,6 +416,7 @@ double getNetworkDistance(SearchEngineData<Algorithm> &engine_working_data,
     if (weight == INVALID_EDGE_WEIGHT)
         return std::numeric_limits<double>::max();
 
+    last_id = packed_path.back();
     std::vector<PathData> unpacked_path;
     ch::unpackPath(facade,
                    packed_path.begin(),

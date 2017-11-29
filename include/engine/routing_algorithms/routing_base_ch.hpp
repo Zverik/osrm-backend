@@ -408,6 +408,7 @@ double getNetworkDistance(SearchEngineData<Algorithm> &engine_working_data,
                           SearchEngineData<ch::Algorithm>::QueryHeap &reverse_heap,
                           const PhantomNode &source_phantom,
                           const PhantomNode &target_phantom,
+                          NodeID& last_id,
                           int duration_upper_bound = INVALID_EDGE_WEIGHT);
 
 template <typename RandomIter, typename FacadeT>
